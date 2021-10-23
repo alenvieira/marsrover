@@ -33,3 +33,20 @@ class Rover:
             self.y -= 1
         elif self.orientation == "W":
             self.x -= 1
+
+    def process(self, plateau, instructions):
+        for instruction in instructions:
+            if instruction == "M":
+                self.move()
+                if self.is_invalid_position(plateau):
+                    raise Exception("Position invalid")
+            elif instruction == "L":
+                self.rotate_left()
+            elif instruction == "R":
+                self.rotate_right()
+
+    def is_invalid_position(self, plateau):
+        return self.x < 0 or self.x > plateau[0] or self.y < 0 or self.y > plateau[1]
+
+    def position(self):
+        return "{} {} {}".format(self.x, self.y, self.orientation)
