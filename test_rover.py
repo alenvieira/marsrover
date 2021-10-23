@@ -27,6 +27,16 @@ class Rover:
         elif self.orientation == "W":
             self.orientation = "N"
 
+    def move(self):
+        if self.orientation == "N":
+            self.y += 1
+        elif self.orientation == "E":
+            self.x += 1
+        elif self.orientation == "S":
+            self.y -= 1
+        elif self.orientation == "W":
+            self.x -= 1
+
 
 class RoverTestCase(unittest.TestCase):
     def setUp(self):
@@ -56,3 +66,16 @@ class RoverTestCase(unittest.TestCase):
         self.assertEqual(self.rover.orientation, "W")
         self.rover.rotate_right()
         self.assertEqual(self.rover.orientation, "N")
+
+    def test_move(self):
+        self.rover.move()
+        self.assertEqual(self.rover.y, 3)
+        self.rover.rotate_right()
+        self.rover.move()
+        self.assertEqual(self.rover.x, 2)
+        self.rover.rotate_right()
+        self.rover.move()
+        self.assertEqual(self.rover.y, 2)
+        self.rover.rotate_right()
+        self.rover.move()
+        self.assertEqual(self.rover.x, 1)
