@@ -1,52 +1,63 @@
+from enum import Enum
+
+
+class Orientation(Enum):
+    NORTH = ("N", "W", "E")
+    SOUTH = ("S", "E", "W")
+    EAST = ("E", "N", "S")
+    WEST = ("W", "S", "N")
+
+    def __new__(cls, abbreviation, direction_left, direction_right):
+        obj = object.__new__(cls)
+        obj.abbreviation = obj._value_ = abbreviation
+        obj.direction_left = direction_left
+        obj.direction_right = direction_right
+        return obj
+
+
+class Movement(Enum):
+    NORTH = ("N", "y", 1)
+    SOUTH = ("S", "y", -1)
+    EAST = ("E", "x", 1)
+    WEST = ("W", "x", -1)
+
+    def __new__(cls, abbreviation, axe, value_movement):
+        obj = object.__new__(cls)
+        obj.abbreviation = obj._value_ = abbreviation
+        obj.axe = axe
+        obj.value_movement = value_movement
+        return obj
+
+
 class Rover:
-    def __init__(self, x=0, y=0, orientation="S"):
+    def __init__(self, x, y, orientation):
         self.x = x
         self.y = y
-        self.orientation = orientation
+        self.orientation = Orientation(orientation)
+        self.actions = {"M": self.move, "L": self.rotate_left, "R": self.rotate_right}
 
     def rotate_left(self):
-        if self.orientation == "N":
-            self.orientation = "W"
-        elif self.orientation == "W":
-            self.orientation = "S"
-        elif self.orientation == "S":
-            self.orientation = "E"
-        elif self.orientation == "E":
-            self.orientation = "N"
+        self.orientation = Orientation(self.orientation.direction_left)
 
     def rotate_right(self):
-        if self.orientation == "N":
-            self.orientation = "E"
-        elif self.orientation == "E":
-            self.orientation = "S"
-        elif self.orientation == "S":
-            self.orientation = "W"
-        elif self.orientation == "W":
-            self.orientation = "N"
+        self.orientation = Orientation(self.orientation.direction_right)
 
     def move(self):
-        if self.orientation == "N":
-            self.y += 1
-        elif self.orientation == "E":
-            self.x += 1
-        elif self.orientation == "S":
-            self.y -= 1
-        elif self.orientation == "W":
-            self.x -= 1
+        movement = Movement(self.orientation.value)
+        if movement.axe == "x":
+            self.x += movement.value_movement
+        elif movement.axe == "y":
+            self.y += movement.value_movement
 
     def process(self, plateau, instructions):
         for instruction in instructions:
-            if instruction == "M":
-                self.move()
-                if self.is_invalid_position(plateau):
-                    raise Exception("Position invalid")
-            elif instruction == "L":
-                self.rotate_left()
-            elif instruction == "R":
-                self.rotate_right()
+            action = self.actions.get(instruction)
+            action()
+            if self.is_invalid_position(plateau):
+                raise Exception("Position invalid")
 
     def is_invalid_position(self, plateau):
         return self.x < 0 or self.x > plateau[0] or self.y < 0 or self.y > plateau[1]
 
     def position(self):
-        return "{} {} {}".format(self.x, self.y, self.orientation)
+        return "{} {} {}".format(self.x, self.y, self.orientation.value)

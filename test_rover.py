@@ -10,27 +10,27 @@ class RoverTestCase(unittest.TestCase):
     def test_create_rover(self):
         self.assertEqual(self.rover.x, 1)
         self.assertEqual(self.rover.y, 2)
-        self.assertEqual(self.rover.orientation, "N")
+        self.assertEqual(self.rover.orientation.value, "N")
 
     def test_rotate_left(self):
         self.rover.rotate_left()
-        self.assertEqual(self.rover.orientation, "W")
+        self.assertEqual(self.rover.orientation.value, "W")
         self.rover.rotate_left()
-        self.assertEqual(self.rover.orientation, "S")
+        self.assertEqual(self.rover.orientation.value, "S")
         self.rover.rotate_left()
-        self.assertEqual(self.rover.orientation, "E")
+        self.assertEqual(self.rover.orientation.value, "E")
         self.rover.rotate_left()
-        self.assertEqual(self.rover.orientation, "N")
+        self.assertEqual(self.rover.orientation.value, "N")
 
     def test_rotate_right(self):
         self.rover.rotate_right()
-        self.assertEqual(self.rover.orientation, "E")
+        self.assertEqual(self.rover.orientation.value, "E")
         self.rover.rotate_right()
-        self.assertEqual(self.rover.orientation, "S")
+        self.assertEqual(self.rover.orientation.value, "S")
         self.rover.rotate_right()
-        self.assertEqual(self.rover.orientation, "W")
+        self.assertEqual(self.rover.orientation.value, "W")
         self.rover.rotate_right()
-        self.assertEqual(self.rover.orientation, "N")
+        self.assertEqual(self.rover.orientation.value, "N")
 
     def test_move(self):
         self.rover.move()
