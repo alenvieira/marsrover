@@ -1,3 +1,4 @@
+import sys
 from enum import Enum
 
 
@@ -61,3 +62,20 @@ class Rover:
 
     def position(self):
         return "{} {} {}".format(self.x, self.y, self.orientation.value)
+
+
+if __name__ == "__main__":
+    test_input = sys.stdin.read()
+    lines = [line.strip() for line in test_input.splitlines()]
+    plateau = [int(i) for i in lines[0].split(" ")]
+    expected_output = []
+    lines = iter(lines[1:])
+    for line in lines:
+        line1 = line.strip()
+        line2 = next(lines).strip()
+        x, y, orientation = line1.split(" ")
+        rover = Rover(int(x), int(y), orientation)
+        rover.process(plateau, line2)
+        expected_output.append(rover.position())
+    for output in expected_output:
+        print(output)
